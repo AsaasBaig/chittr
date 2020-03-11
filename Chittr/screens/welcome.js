@@ -3,8 +3,6 @@ import { Text, TouchableOpacity, View, } from 'react-native';
 import Style from '../styles/style';
 
 
-
-
 export default class Welcome extends Component{
 
   render(){
@@ -33,3 +31,5 @@ export default class Welcome extends Component{
     )
   }
 }
+
+

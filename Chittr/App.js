@@ -1,21 +1,51 @@
 import React, { Component } from 'react';
-import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
-import WelcomePage from './screens/welcome';
-import LoginPage from './screens/login';
-import RegisterPage from './screens/register';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import WelcomeScreen from './screens/welcome';
+import LoginScreen from './screens/login';
+import RegisterScreen from './screens/register';
+import LoginHomeScreen from './screens/home';
+import AuthLoadingScreen from './screens/auth';
 
 
-
-const Navigator = createSwitchNavigator(
-  {
-    Welcome: WelcomePage,
-    Login: LoginPage,
-    Register: RegisterPage,
+const authStack = createStackNavigator({
+  Welcome: {
+    screen: WelcomeScreen,
+    navigationOptions: {
+      headerShown: false,
+    }
   },
-  {
-    initialRouteName: 'Welcome',
-  });
+  Login: {
+    screen: LoginScreen,
+    navigationOptions: {
+      headerShown: false,
+    }
+  },
+  Register: {
+    screen: RegisterScreen,
+    navigationOptions: {
+      headerShown: false,
+    },
+  },
+});
 
-const Chittr = createAppContainer(Navigator);
+const appStack = createSwitchNavigator({
+  LoginHome: {
+    screen: LoginHomeScreen
+  },
+})
+
+//f65a37
+//333333
+//e8dfcc
+//f96a47
+const Chittr = createAppContainer(createSwitchNavigator({
+  AuthLoading: AuthLoadingScreen,
+  App: appStack,
+  Auth: authStack,
+},
+{
+  initialRouteName: 'AuthLoading'
+}));
 export default Chittr
 

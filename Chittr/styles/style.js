@@ -4,7 +4,7 @@ export default StyleSheet.create({
 
     pageContainer: {
       flex: 1,
-      backgroundColor: "#deede6",
+      backgroundColor: "#e8dfcc",
     },
     splashContainer: {
       flex: 1,
@@ -15,12 +15,9 @@ export default StyleSheet.create({
       flex: 1,
       flexDirection: "column",
       justifyContent: "center",
-      marginHorizontal: 45,
     },
     headerContainer:{
-      justifyContent: "center",
       alignItems: "center",
-
       marginBottom: 25,
     },
   
@@ -28,9 +25,11 @@ export default StyleSheet.create({
       fontSize: 40,
       fontFamily: "Nunito",
       fontStyle: "italic",
-      borderBottomWidth: 2,
+      borderBottomWidth: 1.5,
+      borderBottomColor: "#333333",
       marginHorizontal: 45,
       marginBottom: 25,
+      color: "#333333",
     },
 
     appWelcome: {
@@ -39,6 +38,7 @@ export default StyleSheet.create({
       marginHorizontal: 45,
       marginBottom: 35,
       paddingBottom: 55,
+      color: '#333333',
     },
 
     btnWrapper: {
@@ -50,9 +50,9 @@ export default StyleSheet.create({
       marginHorizontal: 10,
       paddingHorizontal: 46,
       paddingVertical: 5,
-      backgroundColor: '#9cd4ba',
+      backgroundColor: '#f96a47',
       borderWidth: 1,
-      borderColor: '#9cd4ba',
+      borderColor: '#f96a47',
       borderRadius: 2,
       elevation: 2,
 
@@ -62,9 +62,9 @@ export default StyleSheet.create({
       marginHorizontal: 10,
       paddingHorizontal: 46,
       paddingVertical: 5,
-      backgroundColor: '#9cd4ba',
+      backgroundColor: '#f96a47',
       borderWidth: 1,
-      borderColor: '#9cd4ba',
+      borderColor: '#f96a47',
       borderRadius: 2,
       elevation: 2,
 
@@ -73,10 +73,12 @@ export default StyleSheet.create({
     loginBtnText: {
       fontFamily: "Nunito",
       fontSize: 15,
+      color: '#333333',
     },
     registerBtnText: {
       fontFamily: "Nunito",
       fontSize: 15,
+      color: '#333333',
     },
 
 
@@ -89,13 +91,19 @@ export default StyleSheet.create({
     formInput: {
       fontFamily: "Nunito",
       marginHorizontal: 45,
-      marginBottom: 10,
+      marginBottom: 20,
+      paddingVertical: 5,
+      backgroundColor: '#333333',
+      color: '#ffffff',
+      borderRadius: 2,
+      borderBottomColor: '#ffffff',
+      borderBottomWidth: 1,
     },
     formLabel: {
       fontSize: 15,
       fontFamily: "Nunito",
-      marginHorizontal: 50,
-      borderBottomWidth: 1,
-      borderColor: 'black',
+      marginHorizontal: 45,
+      marginBottom: 5,
+      color: '#333333',
     }
   });
