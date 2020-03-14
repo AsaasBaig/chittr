@@ -33,6 +33,7 @@ export default class Register extends Component{
         })
         .then((response) => {
           Alert.alert("Registered Successfully");
+          //change this to this.props.navigation.navigate()
           var { navigate } = this.props.navigation
           navigate('Welcome');
         })
@@ -50,45 +51,45 @@ export default class Register extends Component{
     render(){
       return(
         <View style={Style.pageContainer}>
-          <View style={Style.formContainer}>
+          <View style={Style.authFormContainer}>
             <View style={Style.headerContainer}>
-              <Text style={Style.formHeader}>
+              <Text style={Style.authFormHeader}>
                 Register
               </Text>
             </View>
             <View>
-              <Text style={Style.formLabel}>
+              <Text style={Style.authFormLabel}>
                 First Name:
               </Text>
-              <TextInput style={Style.formInput}
+              <TextInput style={Style.authFormInput}
               placeholder="First Name..."
               placeholderTextColor="#c1c1c1"
               onChangeText={(text) => this.setState({given_name : text})}/>
-              <Text style={Style.formLabel}>
+              <Text style={Style.authFormLabel}>
                 Last Name:
               </Text>
-              <TextInput style={Style.formInput}
+              <TextInput style={Style.authFormInput}
               placeholder="Last Name..."
               placeholderTextColor="#c1c1c1"
               onChangeText={(text) => this.setState({family_name : text})}/>
-              <Text style={Style.formLabel}>
+              <Text style={Style.authFormLabel}>
                 Email:
               </Text>
-              <TextInput style={Style.formInput}
+              <TextInput style={Style.authFormInput}
               placeholder="Email..."
               placeholderTextColor="#c1c1c1"
               onChangeText={(text) => this.setState({email : text})}/>
-              <Text style={Style.formLabel}>
+              <Text style={Style.authFormLabel}>
                 Password:
               </Text>
-              <TextInput style={Style.formInput}
+              <TextInput style={Style.authFormInput}
               placeholder="Password..."
               placeholderTextColor="#c1c1c1"
               onChangeText={(text) => this.setState({password : text})}/>
-              <Text style={Style.formLabel}>
+              <Text style={Style.authFormLabel}>
                 Confirm Password:
               </Text>
-              <TextInput style={Style.formInput}
+              <TextInput style={Style.authFormInput}
               placeholder="Confirm password..."
               placeholderTextColor="#c1c1c1"
               onChangeText={(text) => this.setState({confirmed_password : text})}/>

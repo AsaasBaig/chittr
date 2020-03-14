@@ -3,7 +3,7 @@ import { Alert, Text, TextInput, TouchableOpacity, View, AsyncStorage } from 're
 import Style from '../styles/style';
 import { Header } from 'react-native/Libraries/NewAppScreen';
 
-export default class Login extends Component{
+export default class MyProfile extends Component{
 
     constructor(props){
       super(props);
@@ -11,6 +11,7 @@ export default class Login extends Component{
         email: "",
         password: "",
         loginid: 0,
+        token: "",
       }
      }
 
@@ -28,6 +29,10 @@ export default class Login extends Component{
           })
       })
       .then((response) => response.json())
+        //Alert.alert(response);
+        //console.warn(response)
+
+        //navigate('Welcome');
       .then((responseJson) => {
 
         AsyncStorage.setItem('token', responseJson.token);
@@ -38,7 +43,8 @@ export default class Login extends Component{
         // })
         console.log(responseJson.token)
         console.log(responseJson.id)
-        this.props.navigation.navigate('App')
+        var { navigate } = this.props.navigation
+        navigate('App')
       })
       .catch((error) => {
         console.error(error);
@@ -48,32 +54,27 @@ export default class Login extends Component{
     render(){
       return(
         <View style={Style.pageContainer}>
-          <View style={Style.authFormContainer}>
+          <View style={Style.formContainer}>
             <View style={Style.headerContainer}>
-              <Text style={Style.authFormHeader}>
-                Log In
+              <Text style={Style.formHeader}>
+                Post a Chit
               </Text>
             </View>
             <View>
-              <Text style={Style.authFormLabel}>
-                Email:
+              <Text style={Style.formLabel}>
+                Hi: Example Name
               </Text>
-              <TextInput style={Style.authFormInput} 
-              placeholder="Email..."
-              placeholderTextColor="#c1c1c1"
-              onChangeText={(text) => this.setState({email: text})}/>
-              <Text style={Style.authFormLabel}>
-                Password:
+              <Text style={Style.formLabel}>
+                Message:
               </Text>
-              <TextInput style={Style.authFormInput}
-              placeholder='Password...'
+              <TextInput style={Style.formInput}
+              placeholder='Type your message here... (Maximum 141 Characters)'
               placeholderTextColor="#c1c1c1"
-              secureTextEntry
               onChangeText={(text) => this.setState({password: text})}/>
             </View>
             <View style={Style.btnWrapper}>
             <TouchableOpacity style = {Style.registerBtn}>
-              <Text style={Style.btnText} onPress={() => this.login()}>Log In</Text>
+              <Text style={Style.btnText} onPress={() => this.login()}>Post</Text>
             </TouchableOpacity>
             </View>
           </View>

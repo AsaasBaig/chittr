@@ -20,10 +20,10 @@ export default class Welcome extends Component{
           </View>
           <View style={Style.btnWrapper}>
           <TouchableOpacity style = {Style.registerBtn} onPress={() => navigate('Register')}>
-            <Text style={Style.registerBtnText}>Sign Up</Text>
+            <Text style={Style.btnText}>Sign Up</Text>
           </TouchableOpacity>
           <TouchableOpacity style = {Style.loginBtn} onPress={() => navigate('Login')}>
-            <Text style={Style.loginBtnText}>Log In</Text>
+            <Text style={Style.btnText}>Log In</Text>
           </TouchableOpacity>
           </View>
         </View>

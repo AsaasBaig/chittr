@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { Alert, Text, FlatList, TouchableOpacity, View, } from 'react-native';
 import Style from '../styles/style';
+import { Header } from 'react-native/Libraries/NewAppScreen';
+import { TextInput } from 'react-native-paper';
 
-export default class Home extends Component {
+export default class Search extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             isLoading: true,
-            chitList: []
+            chitList: [],
+            search_content: "",
         }
     }
 
@@ -26,7 +29,6 @@ export default class Home extends Component {
             });
     }
 
-  
     componentDidMount() {
         this.getHomeChits();
     }
@@ -45,6 +47,15 @@ export default class Home extends Component {
     render() {
         return (
             <View style={Style.pageContainer}>
+                <View style={Style.searchContainer}>
+                    <View style={Style.searchInputContainer}>
+                        <TextInput style={Style.searchInput}
+                          placeholder='Explore chittr... '
+                          placeholderTextColor="#333333"
+                          underlineColorAndroid={'null'}
+                          onChangeText={(text) => this.setState({ search_content: text })} />
+                    </View>
+                </View>
                 <FlatList style={Style.chitList}
                     data={this.state.chitList}
                     renderItem={({ item }) =>

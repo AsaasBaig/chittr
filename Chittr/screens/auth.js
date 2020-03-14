@@ -3,25 +3,23 @@ import { View, AsyncStorage, ActivityIndicator } from 'react-native';
 import Style from '../styles/style';
 
 
-export default class Auth extends Component{
+export default class Auth extends Component {
 
     constructor(props) {
         super(props);
         this._authTokenCheck();
     }
 
-    _authTokenCheck = async() => {
+    _authTokenCheck = async () => {
         //await AsyncStorage.clear();
         const isLoggedIn = await AsyncStorage.getItem('token');
-        this.props.navigation.navigate(isLoggedIn != null? 'App' : 'Auth');
+        this.props.navigation.navigate(isLoggedIn != null ? 'App' : 'Auth');
     }
-    render(){
-        return(
+    render() {
+        return (
             <View style={Style.pageContainer}>
-                <ActivityIndicator/>
+                <ActivityIndicator />
             </View>
         )
     }
 }
-
-
