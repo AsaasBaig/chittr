@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
@@ -15,6 +14,9 @@ import PostChitScreen from './screens/postchit';
 import MyProfileScreen from './screens/myprofile';
 import SearchScreen from './screens/search';
 import LogoutPage from './screens/logout';
+import CameraPage from './screens/camera';
+import FollowersPage from './screens/followers';
+import FollowingPage from './screens/following';
 import Header from './screens/header';
 
 const authStack = createStackNavigator({
@@ -38,14 +40,31 @@ const authStack = createStackNavigator({
   },
 });
 
+const profileStack = createStackNavigator({
+  Profile: {
+    screen: MyProfileScreen,
+    navigationOptions: {
+      headerShown: false,
+    },
+  },
+  Followers: {
+    screen: FollowersPage,
+  },
+  Following: {
+    screen: FollowingPage,
+  },
+  Camera: {
+    screen: CameraPage,
+  }
+})
 const appStack = createStackNavigator({
   LoginHome: {
     screen: HomeScreen,
     navigationOptions: ({ navigation }) => {
       return {
-        headerTitle: () => <Header navigation={navigation} title='Home'/>,
-        headerStyle:{
-          backgroundColor: '#c1c1c1'
+        headerTitle: () => <Header navigation={navigation} title='Home' />,
+        headerStyle: {
+          backgroundColor: '#333333'
         }
       }
     },
@@ -65,7 +84,7 @@ const appTabs = createMaterialBottomTabNavigator({
   Search: {
     screen: SearchScreen,
     navigationOptions: {
-      title: 'EXPLORE',
+      title: 'SEARCH',
       tabBarIcon: ({ tintColor }) => (
         <Icon color={tintColor} size={25} name="search" />
       ),
@@ -80,15 +99,6 @@ const appTabs = createMaterialBottomTabNavigator({
       ),
     }
   },
-  Profile: {
-    screen: MyProfileScreen,
-    navigationOptions: {
-      title: 'MY PROFILE',
-      tabBarIcon: ({ tintColor }) => (
-        <Icon color={tintColor} size={25} name="person" />
-      ),
-    }
-  }
 },
   {
     initialRouteName: 'Home',
@@ -99,14 +109,17 @@ const appTabs = createMaterialBottomTabNavigator({
     }
   })
 
-  const homeDrawerNav = createDrawerNavigator({
-    Home: {
-      screen: appTabs 
-    },
-    Logout: {
-      screen: LogoutPage,
-    }
+const homeDrawerNav = createDrawerNavigator({
+  MyProfile: {
+    screen: profileStack
   },
+  Home: {
+    screen: appTabs
+  },
+  Logout: {
+    screen: LogoutPage,
+  }
+},
   {
     initialRouteName: 'Home'
   })

@@ -11,7 +11,6 @@ export default class Auth extends Component {
     }
 
     _authTokenCheck = async () => {
-        //await AsyncStorage.clear();
         const isLoggedIn = await AsyncStorage.getItem('token');
         this.props.navigation.navigate(isLoggedIn != null ? 'App' : 'Auth');
     }

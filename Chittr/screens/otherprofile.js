@@ -3,7 +3,7 @@ import { Image, Text, TextInput, TouchableOpacity, View, AsyncStorage } from 're
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Style from '../styles/style';
 
-export default class MyProfile extends Component {
+export default class OtherProfile extends Component {
 
   constructor(props) {
     super(props);
@@ -69,16 +69,6 @@ export default class MyProfile extends Component {
         </View>
 
         <View style={Style.profileDetailsContainer}>
-          <TouchableOpacity style={Style.profileBtn}
-            onPress={() => this.props.navigation.navigate('Followers')}>
-            <Text style={Style.profileBtnText}>Followers</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={Style.profileBtn}
-            onPress={() => this.props.navigation.navigate('Following')}>
-            <Text style={Style.profileBtnText}>Following</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={Style.profileDetailsContainer}>
           <View style={Style.profileDetailsColumn}>
             <Text style={Style.profileFormLabel}>First Name: </Text>
             <Text style={Style.profileFormLabel}>Last Name: </Text>
@@ -89,19 +79,15 @@ export default class MyProfile extends Component {
           <View style={Style.profileDetailsColumn}>
             <TextInput style={Style.profileInput}
               value={this.state.given_name}
-              onChangeText={(text) => this.setState({ given_name: text })} 
-              maxLength={20}/>
+              onChangeText={(text) => this.setState({ given_name: text })} />
             <TextInput style={Style.profileInput}
               value={this.state.family_name}
-              onChangeText={(text) => this.setState({ family_name: text })}
-              maxLength={20}/>
+              onChangeText={(text) => this.setState({ family_name: text })} />
             <TextInput style={Style.profileInput}
               value={this.state.email}
-              onChangeText={(text) => this.setState({ email: text })}
-              maxLength={35}/>
+              onChangeText={(text) => this.setState({ email: text })} />
             <TextInput style={Style.profileInput}
-              onChangeText={(text) => this.setState({ password: text })}
-              maxLength={15}/>
+              onChangeText={(text) => this.setState({ password: text })} />
           </View>
 
         </View>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, AsyncStorage, ActivityIndicator } from 'react-native';
+import { Alert, View, AsyncStorage, ActivityIndicator } from 'react-native';
 import Style from '../styles/style';
 
 
@@ -9,8 +9,28 @@ export default class Logout extends Component{
         super(props);
         this._logout();
     }
+    async logoutRequest() {
+        const token = await AsyncStorage.getItem('token');
+        console.log("Token: " + token);
+        return fetch("http://10.0.2.2:3333/api/v0.0.5/logout",
+          {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'X-Authorization': token
+            },
+        })
+        .then((response) => {
+        Alert.alert("Successfully Logged out")
+        })
+        .catch((error) => {
+        console.error(error);
+        });
+    }
     _logout = async() => {
-        AsyncStorage.setItem('token', responseJson.token);
+        this.logoutRequest()
+        AsyncStorage.removeItem('token');
         this.props.navigation.navigate('Auth');
     }
     render(){
