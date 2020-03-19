@@ -163,37 +163,18 @@ export default StyleSheet.create({
   },
 
   //Chit form styles --------------
-  chitFormContainer: {
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    marginHorizontal: 30,
-    marginTop: 20,
-    backgroundColor: '#333333',
-    borderRadius: 4
-  },
-  chitFormHeader: {
-    fontSize: 20,
-    fontFamily: "Nunito",
-    marginHorizontal: 45,
-    marginTop: 10,
-    color: '#ffffff',
-  },
-  chitFormInput: {
-    fontFamily: "Nunito",
-    marginHorizontal: 25,
-    marginBottom: 20,
-    backgroundColor: '#f96a47',
-    color: '#333333',
-    borderRadius: 4,
-    borderBottomColor: '#ffffff',
-    borderBottomWidth: 1,
-  },
-  chitFormLabel: {
-    fontSize: 15,
-    fontFamily: "Nunito",
-    color: '#333333',
-  },
+  chitFormContainer: { flex: 1, flexDirection: "column", justifyContent: "center", },
+
+  chitFormContainerDetails: {},
+
+  chitFormHeader: { fontSize: 20, fontFamily: "Nunito", marginHorizontal: 45, marginBottom: 10, },
+
+  chitFormInput: { fontFamily: "Nunito", marginHorizontal: 45, marginBottom: 20, paddingVertical: 5,
+    backgroundColor: '#333333', color: '#ffffff', borderRadius: 2, borderBottomColor: '#ffffff',
+    borderBottomWidth: 1, },
+    
+  chitFormLabel: { fontSize: 15, fontFamily: "Nunito", marginHorizontal: 45, marginBottom: 5,
+    color: '#333333', },
 
   //profile style
   profileContainer: {

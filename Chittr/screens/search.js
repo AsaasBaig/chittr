@@ -84,7 +84,7 @@ export default class Search extends Component {
                             </View>
                         </View>
                     }
-                    keyExtractor={({ id }, index) => id}
+                    keyExtractor={(item) => item.user.user_id}
                     showsVerticalScrollIndicator={false}
                 />
             </View>

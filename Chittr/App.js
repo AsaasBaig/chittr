@@ -12,11 +12,12 @@ import HomeScreen from './screens/home';
 import AuthLoadingScreen from './screens/auth';
 import PostChitScreen from './screens/postchit';
 import MyProfileScreen from './screens/myprofile';
+import OtherProfileScreen from './screens/otherprofile';
 import SearchScreen from './screens/search';
-import LogoutPage from './screens/logout';
-import CameraPage from './screens/camera';
-import FollowersPage from './screens/followers';
-import FollowingPage from './screens/following';
+import LogoutScreen from './screens/logout';
+import CameraScreen from './screens/camera';
+import FollowersScreen from './screens/followers';
+import FollowingScreen from './screens/following';
 import Header from './screens/header';
 
 const authStack = createStackNavigator({
@@ -40,6 +41,26 @@ const authStack = createStackNavigator({
   },
 });
 
+const otherProfileStack = createStackNavigator({
+  OtherProfile: {
+    screen: OtherProfileScreen,
+    navigationOptions: {
+      headerShown: false,
+    }
+  },
+  OtherFollowers: {
+    screen: FollowersScreen,
+    navigationOptions: {
+      headerShown: false,
+    }
+  },
+  OtherFollowing: {
+    screen: FollowingScreen,
+    navigationOptions: {
+       headerShown: false,
+    }
+  },
+})
 const profileStack = createStackNavigator({
   Profile: {
     screen: MyProfileScreen,
@@ -48,15 +69,23 @@ const profileStack = createStackNavigator({
     },
   },
   Followers: {
-    screen: FollowersPage,
+    screen: FollowersScreen,
+    navigationOptions: {
+      headerShown: false,
+    }
   },
   Following: {
-    screen: FollowingPage,
+    screen: FollowingScreen,
+    navigationOptions: {
+      headerShown: false,
+    }
   },
   Camera: {
-    screen: CameraPage,
-  }
+    screen: CameraScreen,
+  },
+
 })
+
 const appStack = createStackNavigator({
   LoginHome: {
     screen: HomeScreen,
@@ -68,6 +97,12 @@ const appStack = createStackNavigator({
         }
       }
     },
+  },
+  otherProfile: { 
+    screen: otherProfileStack,
+    navigationOptions: {
+      headerShown: false,
+    }
   }
 })
 
@@ -75,7 +110,7 @@ const appTabs = createMaterialBottomTabNavigator({
   Home: {
     screen: appStack,
     navigationOptions: {
-      title: 'HOME',
+      title: 'Home',
       tabBarIcon: ({ tintColor }) => (
         <Icon color={tintColor} size={25} name="home" />
       ),
@@ -84,7 +119,7 @@ const appTabs = createMaterialBottomTabNavigator({
   Search: {
     screen: SearchScreen,
     navigationOptions: {
-      title: 'SEARCH',
+      title: 'Search',
       tabBarIcon: ({ tintColor }) => (
         <Icon color={tintColor} size={25} name="search" />
       ),
@@ -93,7 +128,7 @@ const appTabs = createMaterialBottomTabNavigator({
   PostChit: {
     screen: PostChitScreen,
     navigationOptions: {
-      title: 'MAKE A CHIT',
+      title: 'Make a Chit',
       tabBarIcon: ({ tintColor }) => (
         <Icon color={tintColor} size={25} name="create" />
       ),
@@ -117,7 +152,7 @@ const homeDrawerNav = createDrawerNavigator({
     screen: appTabs
   },
   Logout: {
-    screen: LogoutPage,
+    screen: LogoutScreen,
   }
 },
   {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Text, TextInput, TouchableOpacity, View, AsyncStorage } from 'react-native';
+import { Text, TextInput, TouchableOpacity, View,} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Style from '../styles/style';
 
 export default class Login extends Component {

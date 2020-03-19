@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Image, Text, FlatList, View, AsyncStorage } from 'react-native';
+import { Image, Text, FlatList, View, } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Style from '../styles/style';
 
 export default class Followers extends Component {
@@ -8,15 +9,14 @@ export default class Followers extends Component {
       super(props);
       this.state = {
          isLoading: true,
+         user_id: this.props.navigation.getParam('user_id'),
          followerList: []
       }
    }
 
-   async getFollowers() {
-      const userid = await AsyncStorage.getItem('userid');
-      console.log("User ID: " + userid);
+   getFollowers() {
       
-      return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + userid + "/followers")
+      return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.user_id + "/followers")
          .then((response) => response.json())
          .then((responseJson) => {
             this.setState({

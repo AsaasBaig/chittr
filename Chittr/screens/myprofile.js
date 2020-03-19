@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View, AsyncStorage } from 'react-native';
+import { Alert, Image, Text, TextInput, TouchableOpacity, View, } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Style from '../styles/style';
 
@@ -9,7 +10,9 @@ export default class MyProfile extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      user_id: "",
+      user: {
+        user_id: this.props.navigation.getParam('user_id')
+      },
       given_name: "",
       family_name: "",
       email: "",
@@ -27,7 +30,9 @@ export default class MyProfile extends Component {
       .then((responseJson) => {
         this.setState({
           isLoading: false,
-          user_id: responseJson.user_id,
+          user: {
+            user_id: responseJson.user_id,
+          },
           given_name: responseJson.given_name,
           family_name: responseJson.family_name,
           email: responseJson.email,
@@ -44,17 +49,46 @@ export default class MyProfile extends Component {
     this.getUserDetails();
   }
 
-  async loadCamera() {
+  loadCamera() {
     this.props.navigation.navigate('Camera')
   }
+
+  async patchUser() {
+    const userid = await AsyncStorage.getItem('userid')
+    const token = await AsyncStorage.getItem('token')
+    return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + userid,
+      {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-Authorization': token
+        },
+        body: JSON.stringify({
+          given_name: this.state.given_name,
+          family_name: this.state.family_name,
+          email: this.state.email,
+          password: this.state.password
+        })
+      })
+      .then((response) => {
+
+        Alert.alert("Succesfully Updated Details")
+        this.getUserDetails();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   render() {
     return (
       <View style={Style.pageContainer}>
-
         <View style={Style.profileContainer}>
 
           <View>
-            <Image style={Style.profileImageContainer} source={{ uri: "http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.user_id + "/photo" }} />
+            <Image style={Style.profileImageContainer}
+              source={{ uri: "http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.user.user_id + "/photo" }} />
           </View>
 
           <View>
@@ -70,11 +104,11 @@ export default class MyProfile extends Component {
 
         <View style={Style.profileDetailsContainer}>
           <TouchableOpacity style={Style.profileBtn}
-            onPress={() => this.props.navigation.navigate('Followers')}>
+            onPress={() => this.props.navigation.navigate('Followers', this.state.user)}>
             <Text style={Style.profileBtnText}>Followers</Text>
           </TouchableOpacity>
           <TouchableOpacity style={Style.profileBtn}
-            onPress={() => this.props.navigation.navigate('Following')}>
+            onPress={() => this.props.navigation.navigate('Following', this.state.user)}>
             <Text style={Style.profileBtnText}>Following</Text>
           </TouchableOpacity>
         </View>
@@ -89,19 +123,19 @@ export default class MyProfile extends Component {
           <View style={Style.profileDetailsColumn}>
             <TextInput style={Style.profileInput}
               value={this.state.given_name}
-              onChangeText={(text) => this.setState({ given_name: text })} 
-              maxLength={20}/>
+              onChangeText={(text) => this.setState({ given_name: text })}
+              maxLength={20} />
             <TextInput style={Style.profileInput}
               value={this.state.family_name}
               onChangeText={(text) => this.setState({ family_name: text })}
-              maxLength={20}/>
+              maxLength={20} />
             <TextInput style={Style.profileInput}
               value={this.state.email}
               onChangeText={(text) => this.setState({ email: text })}
-              maxLength={35}/>
+              maxLength={35} />
             <TextInput style={Style.profileInput}
               onChangeText={(text) => this.setState({ password: text })}
-              maxLength={15}/>
+              maxLength={15} />
           </View>
 
         </View>
@@ -109,7 +143,7 @@ export default class MyProfile extends Component {
         <View style={Style.btnWrapper}>
           <TouchableOpacity style={Style.profileBtn}>
             <Text style={Style.profileBtnText}
-              onPress={() => this.login()}>Save Changes</Text>
+              onPress={() => this.patchUser()}>Save Changes</Text>
           </TouchableOpacity>
         </View>
 
