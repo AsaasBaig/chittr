@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
+//Import navs
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createDrawerNavigator } from 'react-navigation-drawer';
-
+//Import screens
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import WelcomeScreen from './screens/welcome';
 import LoginScreen from './screens/login';
 import RegisterScreen from './screens/register';
 import HomeScreen from './screens/home';
+import GuestHomeScreen from './screens/guesthome';
 import AuthLoadingScreen from './screens/auth';
 import PostChitScreen from './screens/postchit';
 import MyProfileScreen from './screens/myprofile';
 import OtherProfileScreen from './screens/otherprofile';
+import GuestProfileScreen from './screens/guestprofile';
 import SearchScreen from './screens/search';
 import LogoutScreen from './screens/logout';
 import CameraScreen from './screens/camera';
@@ -21,6 +24,8 @@ import FollowersScreen from './screens/followers';
 import FollowingScreen from './screens/following';
 import Header from './screens/header';
 
+//Create stack navigation for when user has not logged in.
+//Disable headers
 const authStack = createStackNavigator({
   Welcome: {
     screen: WelcomeScreen,
@@ -40,8 +45,21 @@ const authStack = createStackNavigator({
       headerShown: false,
     },
   },
+  GuestHome: {
+    screen: GuestHomeScreen,
+    navigationOptions: {
+      headerShown: false,
+    }
+  },
+  GuestProfile: {
+    screen: GuestProfileScreen,
+    navigationOptions: {
+      headerShown: false,
+    }
+  }
 });
 
+//Stack navigation for when a user is viewing another user's profile.
 const otherProfileStack = createStackNavigator({
   OtherProfile: {
     screen: OtherProfileScreen,
@@ -62,6 +80,8 @@ const otherProfileStack = createStackNavigator({
     }
   },
 })
+
+//Stack navigation for when a user is viewing their own profile.
 const profileStack = createStackNavigator({
   Profile: {
     screen: MyProfileScreen,
@@ -87,7 +107,9 @@ const profileStack = createStackNavigator({
 
 })
 
+//Main application stack navigator.
 const appStack = createStackNavigator({
+  //Create home feed after login, with custom header component
   LoginHome: {
     screen: HomeScreen,
     navigationOptions: ({ navigation }) => {
@@ -107,6 +129,7 @@ const appStack = createStackNavigator({
   }
 })
 
+//Create chit posting stack navigation
 const postChitStack = createStackNavigator({
   PostChit: {
     screen: PostChitScreen,
@@ -114,7 +137,6 @@ const postChitStack = createStackNavigator({
       headerShown: false,
     }
   },
-
   ChitCamera: {
     screen: ChitCameraScreen,
     navigationOptions: {
@@ -123,6 +145,11 @@ const postChitStack = createStackNavigator({
   }
 })
 
+//Bottom tab navigator that holds application stack 
+//(home page -> other profiles)
+//(search page -> other profiles)
+//(post chit page -> camera <-)
+//includes tab styles and icons into tab bar.
 const appTabs = createMaterialBottomTabNavigator({
   Home: {
     screen: appStack,
@@ -161,26 +188,33 @@ const appTabs = createMaterialBottomTabNavigator({
       backgroundColor: '#333333',
     }
   })
-
+//Drawer Nav created with a tab navigator inside as the main route (home page)
 const homeDrawerNav = createDrawerNavigator({
   MyProfile: {
-    screen: profileStack
+    screen: profileStack,
+    navigationOptions: {
+      title: "My Profile"
+    }
   },
   Home: {
     screen: appTabs
   },
   Logout: {
     screen: LogoutScreen,
+    navigationOptions: {
+      title: "Log Out"
+    }
   }
 },
   {
     initialRouteName: 'Home'
   })
 
-//f65a37
-//333333
-//e8dfcc
-//f96a47
+//export navigation by creating switch to determine authentication results
+//directing user to correct stack/route
+//if logged in => app (drawer nav)
+//else auth stack
+//load auth check by default.
 const Chittr = createAppContainer(createSwitchNavigator({
   AuthLoading: AuthLoadingScreen,
   App: homeDrawerNav,

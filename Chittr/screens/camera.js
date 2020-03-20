@@ -10,15 +10,18 @@ export default class Camera extends Component {
       super(props);
    }
 
-   takePicture = async() => {
-      if(this.camera) {
-         const options = {quality: 0.5, base64: true};
+   takePicture = async () => {
+      //if camera exists
+      if (this.camera) {
+         //set options, get user token and then set data to be the camera picture data
+         const options = { quality: 0.5, base64: true };
          const token = await AsyncStorage.getItem("token");
          const data = await this.camera.takePictureAsync(options);
 
-         console.log(data.uri, token);
+         console.log("DEBUG: " + " URI, TOKEN: " + data.uri, token);
 
-         return fetch("http://10.0.2.2:3333/api/v0.0.5/user/photo",{
+         //post photo taken to POST user profile photo endpoint using token for correct user.
+         return fetch("http://10.0.2.2:3333/api/v0.0.5/user/photo", {
             method: 'POST',
             headers: {
                "Content-Type": "image/jpeg",
@@ -26,16 +29,17 @@ export default class Camera extends Component {
             },
             body: data
          })
-         .then((response) =>{
-            Alert.alert("Picture Added!");
-            this.props.navigation.navigate('Profile')
-         })
-         .catch((error) =>{
-            console.error(error);
-         })
+            .then((response) => {
+               //Once added, navigate back to profile.
+               Alert.alert("Picture Added!");
+               this.props.navigation.goBack()
+            })
+            .catch((error) => {
+               console.error(error);
+            })
       }
    }
-
+   //render camera component with reference to this.camera
    render() {
       return (
          <View style={Style.cameraContainer}>
@@ -58,4 +62,3 @@ export default class Camera extends Component {
       );
    }
 }
-  

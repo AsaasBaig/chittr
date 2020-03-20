@@ -9,18 +9,21 @@ export default class ChitCamera extends Component {
       super(props);
    }
 
-   takePicture = async() => {
-      if(this.camera) {
-         const options = {quality: 0.5, base64: true};
+   takePicture = async () => {
+      //if camera exists
+      if (this.camera) {
+         //set options and get data from camera.
+         const options = { quality: 0.5, base64: true };
          const data = await this.camera.takePictureAsync(options);
 
          console.log(data.uri);
          Alert.alert("Picture Added!");
+         //send chit photo data back to previous screen to then handle upload to server.
          this.props.navigation.state.params.handlePhoto(data);
          this.props.navigation.goBack()
       }
    }
-
+   //render camera component with reference to this.camera
    render() {
       return (
          <View style={Style.cameraContainer}>
@@ -43,4 +46,3 @@ export default class ChitCamera extends Component {
       );
    }
 }
-  

@@ -25,7 +25,9 @@ export default class OtherProfile extends Component {
     }
   }
 
+  //get user details for current viewed profile.
   async getUserDetails() {
+    //get current user's login token and id and set them to state
     const current_user_id = await AsyncStorage.getItem('userid')
     const token = await AsyncStorage.getItem('token')
     this.setState({
@@ -36,14 +38,17 @@ export default class OtherProfile extends Component {
     return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.user.user_id)
       .then((response) => response.json())
       .then((responseJson) => {
+        //if the current user's id matches the viewer's profile then it's user's own profile.
         if (this.state.user.user_id == current_user_id) {
           this.setState({
             isMyProfile: true
           })
         }
+
         console.log("Clicked user id: " + this.state.user.user_id)
         console.log("Current user id: " + current_user_id)
 
+        //set response data to state.
         this.setState({
           isLoading: false,
           given_name: responseJson.given_name,
@@ -55,6 +60,7 @@ export default class OtherProfile extends Component {
           photo_uri: "http://10.0.2.2:3333/api/v0.0.5/user/" +
             this.state.user.user_id + "/photo?timestamp=" + new Date()
         });
+        //get followers of current user to check if they are being followed already
         this.getFollowers()
         console.log(responseJson)
       })
@@ -63,10 +69,12 @@ export default class OtherProfile extends Component {
       });
   }
 
+  //on mount, get user details.
   componentDidMount() {
     this.getUserDetails();
   }
 
+  //send post request to follow current viewed user
   followUser() {
     return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.user.user_id + "/follow",
       {
@@ -79,6 +87,7 @@ export default class OtherProfile extends Component {
       })
       .then((response) => {
         Alert.alert("Followed!")
+        //refresh user details
         this.getUserDetails();
       })
       .catch((error) => {
@@ -86,6 +95,7 @@ export default class OtherProfile extends Component {
       });
   }
 
+  //unfollow user by sending delete request with current user's token to the other user's follow api
   unFollowUser() {
     return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.user.user_id + "/follow",
       {
@@ -98,6 +108,7 @@ export default class OtherProfile extends Component {
       })
       .then((response) => {
         Alert.alert("Unfollowed")
+        //refresh user details
         this.getUserDetails();
       })
       .catch((error) => {
@@ -105,6 +116,7 @@ export default class OtherProfile extends Component {
       });
   }
 
+  //get recent chits timestamps
   getChitDate(timestamp) {
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var date = new Date(timestamp * 1000);
@@ -117,17 +129,19 @@ export default class OtherProfile extends Component {
   }
 
   getFollowers() {
+    //fetch followers from followers api of current user being viewed.
     return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.user.user_id + "/followers")
       .then((response) => response.json())
       .then((responseJson) => {
+        //check if follower list isn't empty
         if (responseJson.length > 0) {
           responseJson.forEach(followers => {
+            //for each follower check if they are being followed by the current user,
+            //if they are, set isFollowing to true
             if (followers.user_id == this.state.current_user_id) {
-              console.log("Is follow before: " + this.state.isFollowing)
               this.setState({
                 isFollowing: true,
               })
-              console.log("Is follow after: " + this.state.isFollowing)
             }
           });
         }
@@ -143,6 +157,7 @@ export default class OtherProfile extends Component {
       });
   }
 
+  //render flatlist components to insert to flatlist
   _renderItem = ({ item, index }) => {
     return (
       <View style={Style.otherChitContainer}>
@@ -164,9 +179,10 @@ export default class OtherProfile extends Component {
       </View>
     )
   }
-
+  //render recent chits for user.
   render() {
-
+    //if the profile is not the browsing user's own profile, 
+    //if the user is following or not following, render a different button.
     let button;
     if (!this.state.isMyProfile) {
       if (!this.state.isFollowing)
@@ -186,7 +202,6 @@ export default class OtherProfile extends Component {
 
     return (
       <View style={Style.pageContainer}>
-
         <View style={Style.profileContainer}>
 
           <View>
@@ -217,14 +232,12 @@ export default class OtherProfile extends Component {
         <Text style={Style.chitFormLabel}>
           Recent Chits:
         </Text>
-        <ScrollView>
           <FlatList style={Style.chitList}
             data={this.state.recent_chits}
             renderItem={this._renderItem}
             keyExtractor={(item) => item.user_id}
             showsVerticalScrollIndicator={false}
           />
-        </ScrollView>
 
       </View>
     )

@@ -36,7 +36,7 @@ export default StyleSheet.create({
   },
 
 
-  //camera
+  //Camera styles --------------
   cameraContainer: { flex: 1, flexDirection: 'column' },
   cameraPreview: { flex: 1, justifyContent: 'flex-end', alignItems: 'center' },
   cameraCapture: { flex: 0, borderRadius: 5, padding: 15, paddingHorizontal: 20,
@@ -45,12 +45,17 @@ export default StyleSheet.create({
   header: { flex: 1, flexDirection: 'row', alignItems: 'center', 
     justifyContent: 'center', },
 
-  headerText: { flex: 1, alignItems: 'center', justifyContent: "center", color: '#ffffff' },
+  headerText: {alignItems: 'center', justifyContent: "center", color: '#ffffff' },
 
-  headerIcon: { flex: 1, alignItems: 'flex-start', justifyContent: 'center', color: '#ffffff' },
+  headerIcon: {alignItems: 'flex-start', justifyContent: 'center', color: '#ffffff' },
 
   //Button styles -------------
   btnWrapper: { flexDirection: "row", justifyContent: "center", },
+  
+  splashBtnWrapper: { flexDirection: "row", justifyContent: "center", marginTop: 75,},
+
+  splashBtn: { marginHorizontal: 10, paddingHorizontal: 46, paddingVertical: 5, backgroundColor: '#f96a47',
+    borderWidth: 1, borderColor: '#f96a47', borderRadius: 2, elevation: 2, },
 
   loginBtn: {marginHorizontal: 10, paddingHorizontal: 46, paddingVertical: 5, backgroundColor: '#f96a47',
     borderWidth: 1, borderColor: '#f96a47', borderRadius: 2, elevation: 2, },
@@ -85,10 +90,7 @@ export default StyleSheet.create({
   authFormLabel: { fontSize: 15, fontFamily: "Nunito", marginHorizontal: 45, marginBottom: 5,
     color: '#333333', },
 
-
   //Chit styles -------------
-  chitList: {
-  },
   chitContainer: {
     backgroundColor: '#e8dfcc',
     elevation: 3,
@@ -172,6 +174,9 @@ export default StyleSheet.create({
     borderColor: '#333333'
   },
 
+  otherChitContainer: { marginHorizontal: 10, backgroundColor: '#eeeeee', 
+  borderBottomColor: '#cccccc', borderBottomWidth: 1, },
+
   //Chit form styles --------------
   chitFormContainer: { flex: 1, flexDirection: "column", justifyContent: "center", },
 
@@ -187,94 +192,35 @@ export default StyleSheet.create({
     color: '#333333', },
 
   //profile style
-  profileContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    marginTop: 20,
-  },
-  profileImageContainer: {
-    marginHorizontal: 50,
-    marginBottom: 10,
-    paddingHorizontal: 75,
-    paddingVertical: 75,
-    borderRadius: 75,
-    backgroundColor: '#ffffff',
-    borderColor: '#333333',
-    borderWidth: 2,
-  },
-  profileLabel: {
-    fontFamily: "Nunito",
-    fontSize: 25,
-    fontStyle: "italic",
-    color: "#333333",
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333',
-    marginBottom: 15,
-  },
-  profileDetailsContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    paddingVertical: 15,
-    marginVertical: 15,
-    marginHorizontal: 25,
-    backgroundColor: '#eeeeee',
-    borderRadius: 10,
-  },
-  profileInput: {
-    flex: 1,
-    flexWrap: "wrap",
-    marginRight: 25,
-    fontFamily: "Nunito",
-    paddingVertical: 5,
-    backgroundColor: '#333333',
-    color: '#ffffff',
-    borderRadius: 4,
-    borderBottomColor: '#ffffff',
-    borderBottomWidth: 1,
-  },
-  profileFormLabel: {
-    fontSize: 15,
-    fontFamily: "Nunito",
-    marginLeft: 25,
-    marginBottom: 10,
-    color: '#333333',
-  },
-  profileDetailsColumn: {
-    flexDirection: "column",
-    flex: 1,
-  },
+  profileContainer: { alignItems: "center", justifyContent: "center", flexDirection: "column",
+    marginTop: 20, },
+
+  profileImageContainer: { marginHorizontal: 50, marginBottom: 10, paddingHorizontal: 75,
+    paddingVertical: 75, borderRadius: 75, backgroundColor: '#ffffff', borderColor: '#333333',
+    borderWidth: 2, },
+
+  profileLabel: { fontFamily: "Nunito", fontSize: 25, fontStyle: "italic", color: "#333333",
+    borderBottomWidth: 1, borderBottomColor: '#333333', marginBottom: 15, },
+
+  profileDetailsContainer: { flexDirection: "row", justifyContent: "center", paddingVertical: 15,
+    marginVertical: 15, marginHorizontal: 25, backgroundColor: '#eeeeee', borderRadius: 10, },
+
+  profileInput: { flex: 1, flexWrap: "wrap", marginRight: 25, fontFamily: "Nunito",
+    paddingVertical: 5, backgroundColor: '#333333', color: '#ffffff', borderRadius: 4,
+    borderBottomColor: '#ffffff', borderBottomWidth: 1, },
+
+  profileFormLabel: { fontSize: 15, fontFamily: "Nunito", marginLeft: 25, marginBottom: 10,
+    color: '#333333', },
+
+  profileDetailsColumn: { flexDirection: "column", flex: 1, },
 
   //search style
-  searchInputContainer: {
-    marginVertical: 10,
-    marginHorizontal: 5,
-    justifyContent: "flex-start",
-    flexDirection: "row",
-    backgroundColor: '#333333',
-    borderRadius: 15,
-    borderWidth: 1,
-  },
-  searchIconContainer:{
-    marginLeft: 15,
-    justifyContent: "center",
-  },
-  searchInput: {
-    flex:1,
-    flexWrap: 'wrap',
-    fontFamily: "Nunito",
-    fontSize: 15,
-    marginVertical: 5,
-    marginHorizontal: 5,
-    color: '#ffffff',
-    borderColor: '#ffffff',
-  },
+  searchInputContainer: { marginVertical: 10, marginHorizontal: 5, justifyContent: "flex-start",
+    flexDirection: "row", backgroundColor: '#333333', borderRadius: 15, borderWidth: 1, },
 
-  otherChitContainer: {
-    marginHorizontal: 10,
-    backgroundColor: '#eeeeee',
-    borderBottomColor: '#cccccc',
-    borderBottomWidth: 1,
-  },
+  searchIconContainer:{ marginLeft: 15, justifyContent: "center", },
+
+  searchInput: { flex:1, flexWrap: 'wrap', fontFamily: "Nunito", fontSize: 15, marginVertical: 5,
+    marginHorizontal: 5, color: '#ffffff', borderColor: '#ffffff', },
 
 });

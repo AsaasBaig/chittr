@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Image, Text, FlatList, View, TouchableOpacity, } from 'react-native';
 import Style from '../styles/style';
-import Geocoder from 'react-native-geocoding';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Geocoder from 'react-native-geocoding';
 
-export default class Home extends Component {
+export default class GuestHome extends Component {
 
     _isMounted = false;
     constructor(props) {
@@ -16,32 +16,22 @@ export default class Home extends Component {
     }
 
     //check if component is mounted and then get data.
-    onRefresh() {
-        this.setState({ isLoading: true }, function() { this.getHomeChits() });
-    }
-
     componentDidMount() {
         this._isMounted = true;
         this.getHomeChits();
-        this.focusListener = this.props.navigation.addListener('didFocus', () =>{
-            this.onFocusTab
-        })
         console.log("component mounted")
     }
     componentWillUnmount() {
         this._isMounted = false;
         console.log("component unmounted")
-        this.focusListener.remove();
     }
 
-    handleRefresh() {
-        this.getHomeChits()
-    }
 
     getHomeChits() {
-        //initialise google geocode api key and fetch 15 chits
+        //initialise google geocode api key
         Geocoder.init('AIzaSyCxZiDqckiTmAmSU0I4kVTyF3GVM-WIm-g');
-        return fetch("http://10.0.2.2:3333/api/v0.0.5/chits?start=1&count=15")
+        //fetch 30 chits
+        return fetch("http://10.0.2.2:3333/api/v0.0.5/chits?start=1&count=30")
             .then((response) => response.json())
             .then((responseJson) => {
                 //for each chit inside response
@@ -118,9 +108,6 @@ export default class Home extends Component {
     }
 
     _renderItem = ({ item, index }) => {
-        //console.log("Listed Chit's User ID:" + item.user.user_id)
-        //console.log("CHIT IMAGE ID URI: " + item.photo_uri)
-
         //if image response was 404, chit hasImage will be false
         //based on that, render image container.
         let chitImage;
@@ -131,8 +118,7 @@ export default class Home extends Component {
         return (
             <View style={Style.chitContainer}>
                 <View style={Style.chitHeaderContainer}>
-                    <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('OtherProfile', item.user)}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('GuestProfile', item.user)}>
                         <Image style={Style.chitImageContainer}
                             source={{ uri: item.user.photo_uri }}
                         />
@@ -151,7 +137,7 @@ export default class Home extends Component {
                     {chitImage}
                 </View>
                 <View style={Style.chitLocationContainer}>
-                    <Icon color={'#333333'} size={15} name="place"/>
+                    <Icon color={'#333333'} size={15} name="place" />
                     <Text style={Style.chitDate}>
                         {item.address ? item.address : "Location Unavailable"}
                     </Text>
@@ -164,8 +150,6 @@ export default class Home extends Component {
             <View style={Style.pageContainer}>
                 <FlatList style={Style.chitList}
                     data={this.state.chitList}
-                    onRefresh={() => this.onRefresh()}
-                    refreshing={this.state.isLoading}
                     renderItem={this._renderItem}
                     keyExtractor={(item) => item.chit_id}
                     showsVerticalScrollIndicator={false}

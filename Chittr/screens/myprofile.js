@@ -6,6 +6,8 @@ import Style from '../styles/style';
 
 export default class MyProfile extends Component {
 
+  //get params parsed on click to profile ( i.e. user that has been clicked )
+  //set default states
   constructor(props) {
     super(props);
     this.state = {
@@ -25,20 +27,21 @@ export default class MyProfile extends Component {
 
   async getUserDetails() {
 
+    //get current user id and token that were stored locally in async.
     const current_user_id = await (AsyncStorage.getItem('userid'))
-    const test = parseInt(current_user_id);
-    console.log(test)
-
     const token = await AsyncStorage.getItem('token')
+
+    //set tokens and id to state to allow later use without async call
     this.setState({
       current_user_id: current_user_id,
       token: token
     })
-    const url = "http://10.0.2.2:3333/api/v0.0.5/user/"+this.state.current_user_id+"/photo"
-    console.log(url)
+
+    //get current user's details from API
     return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.current_user_id)
       .then((response) => response.json())
       .then((responseJson) => {
+        //set states of user details based on responseJson.
         this.setState({
           isLoading: false,
           user: {
@@ -49,6 +52,7 @@ export default class MyProfile extends Component {
           email: responseJson.email,
           password: "",
           display_name: responseJson.given_name + " " + responseJson.family_name,
+          //create a photo_uri for user
           photo_uri: "http://10.0.2.2:3333/api/v0.0.5/user/"+
           responseJson.user_id +"/photo?timestamp="+(Math.floor((new Date().getTime()) / 1000))
         });
@@ -58,15 +62,19 @@ export default class MyProfile extends Component {
       });
   }
 
+  //on component mount, get user details
   componentDidMount() {
     this.getUserDetails();
   }
 
+  //load camera screen function
   loadCamera() {
     this.props.navigation.navigate('Camera')
   }
 
+  //patch user via API patch request
   async patchUser() {
+    //assign token and current user id to patch via API.
     return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.current_user_id,
       {
         method: 'PATCH',
@@ -83,7 +91,7 @@ export default class MyProfile extends Component {
         })
       })
       .then((response) => {
-
+        //refresh user details on patch.
         Alert.alert("Succesfully Updated Details")
         this.getUserDetails();
       })
@@ -92,6 +100,7 @@ export default class MyProfile extends Component {
       });
   }
 
+  //render components with functions on press etc.
   render() {
     return (
       <View style={Style.pageContainer}>

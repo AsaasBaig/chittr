@@ -14,7 +14,9 @@ export default class Login extends Component {
     }
   }
 
+
   async login() {
+    //fetch login by posting user details from state
     return fetch("http://10.0.2.2:3333/api/v0.0.5/login",
       {
         method: 'POST',
@@ -30,14 +32,17 @@ export default class Login extends Component {
       .then((response) => response.json())
       .then((responseJson) => {
 
+        //set async storage item to be the userid and token of logged in user
         AsyncStorage.setItem('userid', responseJson.id.toString());
         AsyncStorage.setItem('token', responseJson.token);
 
         console.log(responseJson.token)
         console.log(responseJson.id)
+        //navigate to main application once logged in.
         this.props.navigation.navigate('App')
       })
       .catch((error) => {
+        //on error, alert that the wrong email or password was input
         Alert.alert("Wrong Email or Password");
       });
   }

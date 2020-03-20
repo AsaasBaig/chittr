@@ -22,6 +22,7 @@ export default class PostChit extends Component {
     }
   }
 
+  //on component mount, find current location coordinates
   componentDidMount() {
     this._isMounted = true;
     this.findCoordinates();
@@ -32,14 +33,17 @@ export default class PostChit extends Component {
     console.log("component unmounted")
   }
 
+  //set timestamp to state on button press
   setTimestamp() {
     this.setState({ timestamp: Math.floor((new Date().getTime()) / 1000) })
   }
 
+  //handlePhoto pulls photo data from chitcamera screen back to this screen and sets to state
   handlePhoto(photo) {
     this.setState({ photo_data: photo });
   }
 
+  //request android permission if the user has not allowed location on chit posts
   async requestLocationPermission() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -65,7 +69,9 @@ export default class PostChit extends Component {
     }
   }
 
+  //find current coordinates via geolocation react-native service
   findCoordinates = () => {
+    //only go forward with location if permission exists
     if (!this.state.locationPermission) {
       this.state.locationPermission = this.requestLocationPermission();
       Geolocation.getCurrentPosition(
@@ -90,14 +96,17 @@ export default class PostChit extends Component {
     }
   };
   
+  //load camera on camera button press,
+  //send handlePhoto function to chitcamera to then retrieve data back to the function.
   loadCamera() {
     this.props.navigation.navigate('ChitCamera', { handlePhoto: this.handlePhoto.bind(this) })
   }
 
   async uploadPhoto(chit_id) {
-
+    //get current user token
     const token = await AsyncStorage.getItem("token");
 
+    //post chit image with current user's token to associate correct chit with correct user
     return fetch("http://10.0.2.2:3333/api/v0.0.5/chits/" + chit_id + "/photo", {
       method: 'POST',
       headers: {
@@ -114,9 +123,12 @@ export default class PostChit extends Component {
   }
 
   async postChit() {
+    //set timestamp on post chit
     this.setTimestamp();
+    //get token for user
     const token = await AsyncStorage.getItem('token');
-    console.log(token);
+
+    //post chit data to chit endpoint
     return fetch("http://10.0.2.2:3333/api/v0.0.5/chits",
       {
         method: 'POST',
@@ -134,6 +146,9 @@ export default class PostChit extends Component {
       .then((response) => response.json())
       .then((responseJson) => {
         console.log("Chit ID:" + responseJson.chit_id)
+
+        //if photo data exists in state, meaning user has opted to upload a photo, 
+        //launch upload photo function
         if(this.state.photo_data){
           this.uploadPhoto(responseJson.chit_id)
         }

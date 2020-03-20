@@ -15,16 +15,19 @@ export default class Search extends Component {
         }
     }
 
+    //search a user with search string parameter (first loads every user with "a" in their search results)
     searchUser() {
         return fetch("http://10.0.2.2:3333/api/v0.0.5/search_user?q=" + this.state.search_string)
             .then((response) => response.json())
             .then((responseJson) => {
 
                 responseJson.forEach(user => {
-                    user.photo_uri = "http://10.0.2.2:3333/api/v0.0.5/user/"+
-                    user.user_id +"/photo?timestamp="+(Math.floor((new Date().getTime()) / 1000))
+                    //for each user searched, append photo_uri to response data
+                    user.photo_uri = "http://10.0.2.2:3333/api/v0.0.5/user/" +
+                        user.user_id + "/photo?timestamp=" + (Math.floor((new Date().getTime()) / 1000))
                     console.log(user.photo_uri)
                 })
+                //set data to state
                 this.setState({
                     isLoading: false,
                     userList: responseJson,
@@ -35,6 +38,7 @@ export default class Search extends Component {
             });
     }
 
+    //on mount, search for users
     componentDidMount() {
         this._isMounted = true;
         this.searchUser();
@@ -46,12 +50,14 @@ export default class Search extends Component {
         console.log("component unmounted")
     }
 
+    //create components for flatlist to use
     _renderItem = ({ item, index }) => {
         return (
             <View style={Style.chitContainer}>
                 <View style={Style.chitHeaderContainer}>
                     <View>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('OtherProfile', item)}>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('OtherProfile', item)}>
                             <Image style={Style.chitImageContainer} source={{ uri: item.photo_uri }} />
                         </TouchableOpacity>
                     </View>
@@ -73,6 +79,7 @@ export default class Search extends Component {
                             <Icon color={'#c1c1c1'} size={25} name='search' />
                         </View>
                         <TextInput style={Style.searchInput}
+                        //search input box submits on keyboard enter
                             placeholder='Looking for someone? '
                             placeholderTextColor="#c1c1c1"
                             underlineColorAndroid={'transparent'}

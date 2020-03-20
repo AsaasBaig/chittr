@@ -11,10 +11,13 @@ export default function Header({navigation, title}) {
    
    return (
       <View style={Style.header}>
-         <Icon style={Style.headerIcon} name="menu" size={25} onPress={openMenu}/>
+         <View style={{marginRight: 135}}>
+            <Icon style={Style.headerIcon} name="menu" size={25} onPress={openMenu}/>
+         </View>
          <View>
             <Text style={Style.headerText}>{ title }</Text>
          </View>
+         <View></View>
       </View>
    );
 }

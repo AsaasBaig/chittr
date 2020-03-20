@@ -15,8 +15,11 @@ export default class Register extends Component{
       }
      }
 
+    //register user via state values set in form
     async registerUser(){
+      //check if password user entered match the confirm password pass user entered.
       if (this.state.password === this.state.confirmed_password){
+        //if passwords match, send state data to register user endpoint
         return fetch("http://10.0.2.2:3333/api/v0.0.5/user",
           {
             method: 'POST',
@@ -32,6 +35,7 @@ export default class Register extends Component{
             })
         })
         .then((response) => {
+          //on response, Alert user and navigate back to splash so user can login.
           Alert.alert("Registered Successfully");
           this.props.navigation.navigate('Welcome');
         })
@@ -40,11 +44,10 @@ export default class Register extends Component{
         });
       }
       else{
+        //password mismatch alert
         Alert.alert("Error: Passwords do not match.");
       }
     }
-  
-    
   
     render(){
       return(
