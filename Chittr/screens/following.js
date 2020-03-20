@@ -53,7 +53,7 @@ export default class Following extends Component {
                      </View>
                   </View>
                }
-               keyExtractor={({ id }, index) => id}
+               keyExtractor={( item ) => item.user_id}
                showsVerticalScrollIndicator={false}
             />
          </View>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Alert, Text, TextInput, TouchableOpacity, View, PermissionsAndroid } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from 'react-native-geolocation-service';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Style from '../styles/style';
 
 export default class PostChit extends Component {
@@ -17,6 +18,7 @@ export default class PostChit extends Component {
         latitude: "0",
       },
       locationPermission: false,
+      photo_data: "",
     }
   }
 
@@ -34,30 +36,9 @@ export default class PostChit extends Component {
     this.setState({ timestamp: Math.floor((new Date().getTime()) / 1000) })
   }
 
-  findCoordinates = () => {
-    if (!this.state.locationPermission) {
-      this.state.locationPermission = this.requestLocationPermission();
-      Geolocation.getCurrentPosition(
-        (position) => {
-
-          this.setState({ 
-            location: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            }
-          });
-        },
-        (error) => {
-          Alert.alert(error.message)
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 20000,
-          maximumAge: 1000
-        }
-      );
-    }
-  };
+  handlePhoto(photo) {
+    this.setState({ photo_data: photo });
+  }
 
   async requestLocationPermission() {
     try {
@@ -84,6 +65,54 @@ export default class PostChit extends Component {
     }
   }
 
+  findCoordinates = () => {
+    if (!this.state.locationPermission) {
+      this.state.locationPermission = this.requestLocationPermission();
+      Geolocation.getCurrentPosition(
+        (position) => {
+
+          this.setState({
+            location: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            }
+          });
+        },
+        (error) => {
+          Alert.alert(error.message)
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 20000,
+          maximumAge: 1000
+        }
+      );
+    }
+  };
+  
+  loadCamera() {
+    this.props.navigation.navigate('ChitCamera', { handlePhoto: this.handlePhoto.bind(this) })
+  }
+
+  async uploadPhoto(chit_id) {
+
+    const token = await AsyncStorage.getItem("token");
+
+    return fetch("http://10.0.2.2:3333/api/v0.0.5/chits/" + chit_id + "/photo", {
+      method: 'POST',
+      headers: {
+        "Content-Type": "image/jpeg",
+        "X-Authorization": token
+      },
+      body: this.state.photo_data
+    })
+      .then((response) => {
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   async postChit() {
     this.setTimestamp();
     const token = await AsyncStorage.getItem('token');
@@ -102,7 +131,12 @@ export default class PostChit extends Component {
           location: this.state.location,
         })
       })
-      .then((response) => {
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log("Chit ID:" + responseJson.chit_id)
+        if(this.state.photo_data){
+          this.uploadPhoto(responseJson.chit_id)
+        }
         Alert.alert("Succesfully posted Chit!")
         this.props.navigation.navigate('Home')
       })
@@ -133,8 +167,15 @@ export default class PostChit extends Component {
               onChangeText={(text) => this.setState({ chit_content: text })} />
           </View>
           <View style={Style.btnWrapper}>
-            <TouchableOpacity style={Style.postBtn}>
-              <Text style={Style.btnText} onPress={() => this.postChit()}>Post</Text>
+            <TouchableOpacity style={Style.postBtn}
+              onPress={() => this.loadCamera()}>
+              <Text style={Style.btnText} >
+                <Icon color={'#333333'} size={25} name="camera-alt" />
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={Style.postBtn}
+              onPress={() => this.postChit()}>
+              <Text style={Style.btnText}>Post</Text>
             </TouchableOpacity>
           </View>
         </View>

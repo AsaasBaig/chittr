@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
-import {Image, FlatList, Text, TextInput, View, } from 'react-native';
+import { Image, FlatList, Text, TextInput, TouchableOpacity, View, } from 'react-native';
 import Style from '../styles/style';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default class Search extends Component {
 
+    _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
             isLoading: true,
-            chitList: [],
-            search_content: "",
+            userList: [],
+            search_string: "a",
         }
     }
 
-    async getHomeChits() {
-        return fetch("http://10.0.2.2:3333/api/v0.0.5/chits?")
+    searchUser() {
+        return fetch("http://10.0.2.2:3333/api/v0.0.5/search_user?q=" + this.state.search_string)
             .then((response) => response.json())
             .then((responseJson) => {
+
+                responseJson.forEach(user => {
+                    user.photo_uri = "http://10.0.2.2:3333/api/v0.0.5/user/"+
+                    user.user_id +"/photo?timestamp="+(Math.floor((new Date().getTime()) / 1000))
+                    console.log(user.photo_uri)
+                })
                 this.setState({
                     isLoading: false,
-                    chitList: responseJson,
+                    userList: responseJson,
                 });
             })
             .catch((error) => {
@@ -29,62 +36,55 @@ export default class Search extends Component {
     }
 
     componentDidMount() {
-        this.getHomeChits();
+        this._isMounted = true;
+        this.searchUser();
+        console.log("component mounted")
     }
 
-    getChitDate(timestamp) {
-        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        var date = new Date(timestamp * 1000);
-        var day = date.getDay();
-        var month = months[date.getMonth()];
-        var year = date.getFullYear();
-        //var hour = date.getHours();
-        //var min = date.getMinutes();
-        var time = day + " " + month + ' | ' + year;
-        return time;
+    componentWillUnmount() {
+        this._isMounted = false;
+        console.log("component unmounted")
     }
 
-    //onSubmitEditing={}
+    _renderItem = ({ item, index }) => {
+        return (
+            <View style={Style.chitContainer}>
+                <View style={Style.chitHeaderContainer}>
+                    <View>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('OtherProfile', item)}>
+                            <Image style={Style.chitImageContainer} source={{ uri: item.photo_uri }} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={Style.chitHeaderName}>
+                        <Text style={Style.chitHeader}>{item.given_name}</Text>
+                        <Text style={Style.chitHeader}>{item.family_name}</Text>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
     render() {
         return (
             <View style={Style.pageContainer}>
                 <View style={Style.searchContainer}>
                     <View style={Style.searchInputContainer}>
                         <View style={Style.searchIconContainer}>
-                            <Icon color={'#c1c1c1'} size={25} name='search'/>
+                            <Icon color={'#c1c1c1'} size={25} name='search' />
                         </View>
                         <TextInput style={Style.searchInput}
                             placeholder='Looking for someone? '
                             placeholderTextColor="#c1c1c1"
                             underlineColorAndroid={'transparent'}
-                            onChangeText={(text) => this.setState({ search_content: text })} 
-                            maxLength={25}/>
+                            onChangeText={(text) => this.setState({ search_string: text })}
+                            maxLength={25}
+                            onSubmitEditing={() => this.searchUser()} />
                     </View>
                 </View>
                 <FlatList style={Style.chitList}
-                    data={this.state.chitList}
-                    renderItem={({ item }) =>
-                        <View style={Style.chitContainer}>
-                            <View style={Style.chitHeaderContainer}>
-                                <View>
-                                    <Image style={Style.chitImageContainer} source={{ uri: "http://10.0.2.2:3333/api/v0.0.5/user/"+item.user.user_id+"/photo"}} />
-                                </View>
-                                <View style={Style.chitHeaderName}>
-                                    <Text style={Style.chitHeader}>{item.user.given_name}</Text>
-                                    <Text style={Style.chitHeader}>{item.user.family_name}</Text>
-                                </View>
-                                <View style={Style.chitDateContainer}>
-                                    <Text style={Style.chitDate}>{this.getChitDate(item.timestamp)}</Text>
-                                </View>
-                            </View>
-                            
-                            <Text style={Style.chitContent}>{item.chit_content}</Text>
-                            <View style={Style.chitLocationContainer}>
-                                <Text style={Style.chitDate}>Manchester, United Kingdom, England</Text>
-                            </View>
-                        </View>
-                    }
-                    keyExtractor={(item) => item.user.user_id}
+                    data={this.state.userList}
+                    renderItem={this._renderItem}
+                    keyExtractor={(item) => item.user_id}
                     showsVerticalScrollIndicator={false}
                 />
             </View>

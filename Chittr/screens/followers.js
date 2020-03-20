@@ -36,6 +36,7 @@ export default class Followers extends Component {
    render() {
       return (
          <View style={Style.pageContainer}>
+            <Text>test</Text>
             <FlatList style={Style.chitList}
                data={this.state.followerList}
                renderItem={({ item }) =>
@@ -53,7 +54,7 @@ export default class Followers extends Component {
                      </View>
                   </View>
                }
-               keyExtractor={({ id }, index) => id}
+               keyExtractor={( item ) => item.user_id}
                showsVerticalScrollIndicator={false}
             />
          </View>

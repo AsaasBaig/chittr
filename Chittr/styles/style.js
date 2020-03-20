@@ -146,7 +146,7 @@ export default StyleSheet.create({
     marginHorizontal: 10,
     paddingHorizontal: 5,
     paddingTop: 10,
-    paddingBottom: 35,
+    paddingBottom: 25,
     fontSize: 15,
     fontFamily: "Nunito",
     color: '#333333',
@@ -158,6 +158,16 @@ export default StyleSheet.create({
     paddingHorizontal: 25,
     paddingVertical: 25,
     borderRadius: 75,
+    borderWidth: 1,
+    borderColor: '#333333'
+  },
+
+  chitPhotoContainer: {
+    marginHorizontal: 15,
+    marginBottom: 15,
+    paddingHorizontal: 5,
+    paddingVertical: 150,
+    borderRadius: 2,
     borderWidth: 1,
     borderColor: '#333333'
   },
@@ -237,7 +247,7 @@ export default StyleSheet.create({
 
   //search style
   searchInputContainer: {
-    marginVertical: 5,
+    marginVertical: 10,
     marginHorizontal: 5,
     justifyContent: "flex-start",
     flexDirection: "row",
@@ -259,4 +269,12 @@ export default StyleSheet.create({
     color: '#ffffff',
     borderColor: '#ffffff',
   },
+
+  otherChitContainer: {
+    marginHorizontal: 10,
+    backgroundColor: '#eeeeee',
+    borderBottomColor: '#cccccc',
+    borderBottomWidth: 1,
+  },
+
 });

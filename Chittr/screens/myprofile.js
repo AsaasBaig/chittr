@@ -10,6 +10,8 @@ export default class MyProfile extends Component {
     super(props);
     this.state = {
       isLoading: true,
+      token: "",
+      current_user_id: 0,
       user: {
         user_id: this.props.navigation.getParam('user_id')
       },
@@ -17,15 +19,24 @@ export default class MyProfile extends Component {
       family_name: "",
       email: "",
       display_name: "",
+      photo_uri: "",
     }
   }
 
   async getUserDetails() {
 
-    const userid = await AsyncStorage.getItem('userid');
-    console.log("User ID: " + userid);
+    const current_user_id = await (AsyncStorage.getItem('userid'))
+    const test = parseInt(current_user_id);
+    console.log(test)
 
-    return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + userid)
+    const token = await AsyncStorage.getItem('token')
+    this.setState({
+      current_user_id: current_user_id,
+      token: token
+    })
+    const url = "http://10.0.2.2:3333/api/v0.0.5/user/"+this.state.current_user_id+"/photo"
+    console.log(url)
+    return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.current_user_id)
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({
@@ -37,7 +48,9 @@ export default class MyProfile extends Component {
           family_name: responseJson.family_name,
           email: responseJson.email,
           password: "",
-          display_name: responseJson.given_name + " " + responseJson.family_name
+          display_name: responseJson.given_name + " " + responseJson.family_name,
+          photo_uri: "http://10.0.2.2:3333/api/v0.0.5/user/"+
+          responseJson.user_id +"/photo?timestamp="+(Math.floor((new Date().getTime()) / 1000))
         });
       })
       .catch((error) => {
@@ -54,15 +67,13 @@ export default class MyProfile extends Component {
   }
 
   async patchUser() {
-    const userid = await AsyncStorage.getItem('userid')
-    const token = await AsyncStorage.getItem('token')
-    return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + userid,
+    return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.current_user_id,
       {
         method: 'PATCH',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          'X-Authorization': token
+          'X-Authorization': this.state.token
         },
         body: JSON.stringify({
           given_name: this.state.given_name,
@@ -88,7 +99,7 @@ export default class MyProfile extends Component {
 
           <View>
             <Image style={Style.profileImageContainer}
-              source={{ uri: "http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.user.user_id + "/photo" }} />
+              source={{ uri: this.state.photo_uri }} />
           </View>
 
           <View>
@@ -112,6 +123,7 @@ export default class MyProfile extends Component {
             <Text style={Style.profileBtnText}>Following</Text>
           </TouchableOpacity>
         </View>
+        
         <View style={Style.profileDetailsContainer}>
           <View style={Style.profileDetailsColumn}>
             <Text style={Style.profileFormLabel}>First Name: </Text>

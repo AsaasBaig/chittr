@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, Image, Text, FlatList, TouchableOpacity, View, } from 'react-native';
+import { Alert, Image, Text, FlatList, ScrollView, TouchableOpacity, View, } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Style from '../styles/style';
 
 export default class OtherProfile extends Component {
@@ -21,7 +20,8 @@ export default class OtherProfile extends Component {
       family_name: "",
       email: "",
       display_name: "",
-      recentChits: [],
+      photo_uri: "",
+      recent_chits: [],
     }
   }
 
@@ -32,6 +32,7 @@ export default class OtherProfile extends Component {
       current_user_id: current_user_id,
       token: token
     })
+
     return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.user.user_id)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -42,7 +43,7 @@ export default class OtherProfile extends Component {
         }
         console.log("Clicked user id: " + this.state.user.user_id)
         console.log("Current user id: " + current_user_id)
-        console.log(this.state.isMyProfile)
+
         this.setState({
           isLoading: false,
           given_name: responseJson.given_name,
@@ -50,9 +51,12 @@ export default class OtherProfile extends Component {
           email: responseJson.email,
           password: "",
           display_name: responseJson.given_name + " " + responseJson.family_name,
-          recentChits: responseJson.recentChits
+          recent_chits: responseJson.recent_chits,
+          photo_uri: "http://10.0.2.2:3333/api/v0.0.5/user/" +
+            this.state.user.user_id + "/photo?timestamp=" + new Date()
         });
         this.getFollowers()
+        console.log(responseJson)
       })
       .catch((error) => {
         console.log(error);
@@ -101,6 +105,17 @@ export default class OtherProfile extends Component {
       });
   }
 
+  getChitDate(timestamp) {
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var date = new Date(timestamp * 1000);
+    var day = date.getDay();
+    var month = months[date.getMonth()];
+    var year = date.getFullYear();
+    var time = day + " " + month + ' | ' + year;
+    console.log(time)
+    return time;
+  }
+
   getFollowers() {
     return fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.user.user_id + "/followers")
       .then((response) => response.json())
@@ -130,28 +145,22 @@ export default class OtherProfile extends Component {
 
   _renderItem = ({ item, index }) => {
     return (
-      <View style={Style.chitContainer}>
+      <View style={Style.otherChitContainer}>
         <View style={Style.chitHeaderContainer}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('OtherProfile', item.user)}>
+          <View>
             <Image style={Style.chitImageContainer}
-              source={{ uri: "http://10.0.2.2:3333/api/v0.0.5/user/" + item.user.user_id + "/photo" }}
+              source={{ uri: this.state.photo_uri }}
             />
-          </TouchableOpacity>
+          </View>
           <View style={Style.chitHeaderName}>
-            <Text style={Style.chitHeader}>{item.user.given_name}</Text>
-            <Text style={Style.chitHeader}>{item.user.family_name}</Text>
+            <Text style={Style.chitHeader}>{this.state.given_name}</Text>
+            <Text style={Style.chitHeader}>{this.state.family_name}</Text>
           </View>
           <View style={Style.chitDateContainer}>
             <Text style={Style.chitDate}>{this.getChitDate(item.timestamp)}</Text>
           </View>
         </View>
-
         <Text style={Style.chitContent}>{item.chit_content}</Text>
-        <View style={Style.chitLocationContainer}>
-          <Text style={Style.chitDate}>
-            {item.address ? item.address : "No Location"}
-          </Text>
-        </View>
       </View>
     )
   }
@@ -182,7 +191,7 @@ export default class OtherProfile extends Component {
 
           <View>
             <Image style={Style.profileImageContainer}
-              source={{ uri: "http://10.0.2.2:3333/api/v0.0.5/user/" + this.state.user.user_id + "/photo" }} />
+              source={{ uri: this.state.photo_uri }} />
           </View>
 
           <View>
@@ -205,14 +214,17 @@ export default class OtherProfile extends Component {
             <Text style={Style.profileBtnText}>Following</Text>
           </TouchableOpacity>
         </View>
-        <View>
+        <Text style={Style.chitFormLabel}>
+          Recent Chits:
+        </Text>
+        <ScrollView>
           <FlatList style={Style.chitList}
-            data={this.state.chitList}
+            data={this.state.recent_chits}
             renderItem={this._renderItem}
             keyExtractor={(item) => item.user_id}
             showsVerticalScrollIndicator={false}
           />
-        </View>
+        </ScrollView>
 
       </View>
     )

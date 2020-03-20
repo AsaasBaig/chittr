@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TextInput, TouchableOpacity, View,} from 'react-native';
+import { Alert, Text, TextInput, TouchableOpacity, View,} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Style from '../styles/style';
 
@@ -38,7 +38,7 @@ export default class Login extends Component {
         this.props.navigation.navigate('App')
       })
       .catch((error) => {
-        console.error(error);
+        Alert.alert("Wrong Email or Password");
       });
   }
 
@@ -58,6 +58,7 @@ export default class Login extends Component {
             <TextInput style={Style.authFormInput}
               placeholder="Email..."
               placeholderTextColor="#c1c1c1"
+              maxLength={35}
               onChangeText={(text) => this.setState({ email: text })} />
             <Text style={Style.authFormLabel}>
               Password:
@@ -66,6 +67,7 @@ export default class Login extends Component {
               placeholder='Password...'
               placeholderTextColor="#c1c1c1"
               secureTextEntry
+              maxLength={15}
               onChangeText={(text) => this.setState({ password: text })} />
           </View>
           <View style={Style.btnWrapper}>

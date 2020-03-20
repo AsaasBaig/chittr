@@ -16,6 +16,7 @@ import OtherProfileScreen from './screens/otherprofile';
 import SearchScreen from './screens/search';
 import LogoutScreen from './screens/logout';
 import CameraScreen from './screens/camera';
+import ChitCameraScreen from './screens/chitcamera';
 import FollowersScreen from './screens/followers';
 import FollowingScreen from './screens/following';
 import Header from './screens/header';
@@ -106,6 +107,22 @@ const appStack = createStackNavigator({
   }
 })
 
+const postChitStack = createStackNavigator({
+  PostChit: {
+    screen: PostChitScreen,
+    navigationOptions: {
+      headerShown: false,
+    }
+  },
+
+  ChitCamera: {
+    screen: ChitCameraScreen,
+    navigationOptions: {
+      headerShown: false,
+    }
+  }
+})
+
 const appTabs = createMaterialBottomTabNavigator({
   Home: {
     screen: appStack,
@@ -126,14 +143,15 @@ const appTabs = createMaterialBottomTabNavigator({
     }
   },
   PostChit: {
-    screen: PostChitScreen,
+    screen: postChitStack,
     navigationOptions: {
       title: 'Make a Chit',
       tabBarIcon: ({ tintColor }) => (
         <Icon color={tintColor} size={25} name="create" />
       ),
     }
-  },
+  }
+  
 },
   {
     initialRouteName: 'Home',

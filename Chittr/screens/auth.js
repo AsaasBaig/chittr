@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, AsyncStorage, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Style from '../styles/style';
 
 

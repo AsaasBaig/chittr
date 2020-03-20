@@ -33,9 +33,7 @@ export default class Register extends Component{
         })
         .then((response) => {
           Alert.alert("Registered Successfully");
-          //change this to this.props.navigation.navigate()
-          var { navigate } = this.props.navigation
-          navigate('Welcome');
+          this.props.navigation.navigate('Welcome');
         })
         .catch((error) => {
           console.error(error);
@@ -64,6 +62,7 @@ export default class Register extends Component{
               <TextInput style={Style.authFormInput}
               placeholder="First Name..."
               placeholderTextColor="#c1c1c1"
+              maxLength={20}
               onChangeText={(text) => this.setState({given_name : text})}/>
               <Text style={Style.authFormLabel}>
                 Last Name:
@@ -71,6 +70,7 @@ export default class Register extends Component{
               <TextInput style={Style.authFormInput}
               placeholder="Last Name..."
               placeholderTextColor="#c1c1c1"
+              maxLength={20}
               onChangeText={(text) => this.setState({family_name : text})}/>
               <Text style={Style.authFormLabel}>
                 Email:
@@ -78,6 +78,7 @@ export default class Register extends Component{
               <TextInput style={Style.authFormInput}
               placeholder="Email..."
               placeholderTextColor="#c1c1c1"
+              maxLength={35}
               onChangeText={(text) => this.setState({email : text})}/>
               <Text style={Style.authFormLabel}>
                 Password:
@@ -85,6 +86,8 @@ export default class Register extends Component{
               <TextInput style={Style.authFormInput}
               placeholder="Password..."
               placeholderTextColor="#c1c1c1"
+              secureTextEntry
+              maxLength={15}
               onChangeText={(text) => this.setState({password : text})}/>
               <Text style={Style.authFormLabel}>
                 Confirm Password:
@@ -92,6 +95,8 @@ export default class Register extends Component{
               <TextInput style={Style.authFormInput}
               placeholder="Confirm password..."
               placeholderTextColor="#c1c1c1"
+              secureTextEntry
+              maxLength={15}
               onChangeText={(text) => this.setState({confirmed_password : text})}/>
             </View>
             <View style={Style.btnWrapper}>

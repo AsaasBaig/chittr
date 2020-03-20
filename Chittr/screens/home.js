@@ -25,19 +25,43 @@ export default class Home extends Component {
     }
 
     getHomeChits() {
-        return fetch("http://10.0.2.2:3333/api/v0.0.5/chits?")
+        Geocoder.init('AIzaSyCxZiDqckiTmAmSU0I4kVTyF3GVM-WIm-g');
+        return fetch("http://10.0.2.2:3333/api/v0.0.5/chits?start=1&count=15")
             .then((response) => response.json())
             .then((responseJson) => {
                 responseJson.forEach(chit => {
                     if (chit.location) {
-                        this.getLocation(chit.location).then(json => {
+                        this.getLocation(chit.location)
+                        .then(json => {
                             chit.address = json.results[0].address_components[3].long_name
                                 + " | " + json.results[0].address_components[4].long_name;
                             console.log(chit.address);
+
                         })
                             .catch(error => console.warn(error));
                     }
-                });
+                    chit.user.photo_uri = "http://10.0.2.2:3333/api/v0.0.5/user/" +
+                        chit.user.user_id + "/photo?timestamp=" + new Date()
+
+                    chit.photo_uri = "http://10.0.2.2:3333/api/v0.0.5/chits/" +
+                        chit.chit_id + "/photo?timestamp=" + new Date()
+
+                    this.checkImageURL(chit.photo_uri)
+                        .then((response) => {
+                            if (response.status == 404) {
+                                chit.hasImage = false
+                            }
+                            else {
+                                chit.hasImage = true
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        });
+
+                    //console.log(chit.user.photo_uri)
+                    //console.log(chit.photo_uri)
+                })
                 this.setState({
                     isLoading: false,
                     chitList: responseJson,
@@ -48,8 +72,10 @@ export default class Home extends Component {
             });
     }
 
+    checkImage() {
+
+    }
     getLocation(location) {
-        Geocoder.init('AIzaSyCxZiDqckiTmAmSU0I4kVTyF3GVM-WIm-g');
         return Geocoder.from(location.latitude, location.longitude);
     }
 
@@ -64,13 +90,24 @@ export default class Home extends Component {
         return time;
     }
 
+    checkImageURL(url) {
+        return fetch(url)
+    }
+
     _renderItem = ({ item, index }) => {
+        //console.log("Listed Chit's User ID:" + item.user.user_id)
+        //console.log("CHIT IMAGE ID URI: " + item.photo_uri)
+        let chitImage;
+        if (item.hasImage) {
+            chitImage = <Image style={Style.chitPhotoContainer}
+                source={{ uri: item.photo_uri }} />
+        }
         return (
             <View style={Style.chitContainer}>
                 <View style={Style.chitHeaderContainer}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('OtherProfile', item.user)}>
                         <Image style={Style.chitImageContainer}
-                            source={{ uri: "http://10.0.2.2:3333/api/v0.0.5/user/" + item.user.user_id + "/photo" }}
+                            source={{ uri: item.user.photo_uri }}
                         />
                     </TouchableOpacity>
                     <View style={Style.chitHeaderName}>
@@ -83,6 +120,9 @@ export default class Home extends Component {
                 </View>
 
                 <Text style={Style.chitContent}>{item.chit_content}</Text>
+                <View>
+                    {chitImage}
+                </View>
                 <View style={Style.chitLocationContainer}>
                     <Text style={Style.chitDate}>
                         {item.address ? item.address : "Location Unavailable"}
